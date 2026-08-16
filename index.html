@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Larissa App Cilacap</title>
+  <meta name="theme-color" content="#009D7B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Favicon & Icon -->
+  <link rel="icon" type="image/jpeg" href="https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80">
+  <!-- FontAwesome & Tailwind CSS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Manifest PWA Khusus Desktop (Landscape Allowed) -->
+  <script>
+    const manifestPWA = {
+      "name": "Larissa App",
+      "short_name": "Cilacap",
+      "description": "Cek poin reward dan katalog hadiah Larissa - Desktop View",
+      "start_url": ".",
+      "display": "standalone",
+      "background_color": "#0f172a",
+      "theme_color": "#009D7B",
+      "orientation": "any",
+      "icons": [
+        {
+          "src": "https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80",
+          "sizes": "512x512",
+          "type": "image/jpeg"
+        }
+      ]
+    };
+    const blob = new Blob([JSON.stringify(manifestPWA)], {type: 'application/json'});
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = URL.createObjectURL(blob);
+    document.head.appendChild(link);
+  </script>
+
+  <style>
+    body, html { 
+      margin: 0; 
+      padding: 0; 
+      width: 100vw; 
+      height: 100vh;
+      overflow: hidden; 
+      background-color: #0f172a; 
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Container Iframe Utama Desktop */
+    .desktop-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    iframe { 
+      width: 100%; 
+      height: 100%; 
+      border: none; 
+      display: block; 
+      background-color: #ffffff;
+    }
+
+    /* Splash Screen Desktop */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(0, 157, 123, 0.85)), 
+                  url('https://images.unsplash.com/photo-1785138859928-e87e911afb2c?q=80') center/cover no-repeat;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
+    }
+
+    /* Custom Scrollbar untuk Desktop */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #009D7B;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="relative select-none">
+
+  <!-- CONTROL TOOLBAR POJOK KANAN ATAS (KHUSUS DESKTOP) -->
+  <div class="fixed top-4 right-5 z-50 flex items-center gap-3 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-2xl">
+    <!-- Indikator Status Koneksi -->
+    <div id="connection-status" class="flex items-center gap-2 text-xs font-semibold text-emerald-400 border-r border-white/10 pr-3">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span id="status-text" class="hidden sm:inline">Online</span>
+    </div>
+
+    <!-- Tombol Muat Ulang Iframe -->
+    <button onclick="reloadApp()" title="Muat Ulang Aplikasi (F5)" class="text-white hover:text-[#009D7B] active:scale-95 transition p-1.5 cursor-pointer">
+      <i class="fas fa-rotate-right text-base"></i>
+    </button>
+
+    <!-- Tombol Mode Layar Penuh -->
+    <button onclick="toggleFullscreen()" title="Layar Penuh (F11)" class="text-white hover:text-[#009D7B] active:scale-95 transition p-1.5 cursor-pointer">
+      <i id="fullscreen-icon" class="fas fa-expand text-base"></i>
+    </button>
+  </div>
+
+  <!-- DESKTOP SPLASH SCREEN -->
+  <div id="loading-screen">
+    <div class="bg-slate-900/80 backdrop-blur-md p-8 rounded-2xl border border-white/10 shadow-2xl flex flex-col items-center gap-4 text-center max-w-sm mx-4">
+      <img src="https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80" alt="Larissa Logo" class="w-20 h-20 rounded-2xl object-cover shadow-lg border border-emerald-500/30">
+      <div>
+        <h1 class="text-white text-xl font-bold tracking-wide">Larissa App</h1>
+        <p class="text-slate-400 text-xs mt-1">Memuat Antarmuka Desktop...</p>
+      </div>
+      <!-- Progress Spinner -->
+      <div class="w-8 h-8 border-4 border-emerald-500/20 border-t-emerald-400 rounded-full animate-spin mt-2"></div>
+    </div>
+  </div>
+
+  <!-- CONTAINER UTAMA IFRAME DESKTOP -->
+  <div class="desktop-container">
+    <iframe 
+      id="app-frame" 
+      src="https://script.google.com/macros/s/AKfycbxI2OyyQq8MjRd4iyPSPoS-l7uEOerizxGHN4m22q2Jfo-kaxYn4KmxeAMmr0w6h3g1/exec"
+      allow="autoplay; camera; microphone; clipboard-read; clipboard-write; geolocation; fullscreen">
+    </iframe>
+  </div>
+
+  <script>
+    const iframe = document.getElementById('app-frame');
+    const loadingScreen = document.getElementById('loading-screen');
+    const statusText = document.getElementById('status-text');
+    const connectionStatus = document.getElementById('connection-status');
+
+    // 1. Sembunyikan Splash Screen setelah Iframe selesai dimuat
+    iframe.addEventListener('load', function() {
+      setTimeout(() => {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.style.visibility = 'hidden';
+        }, 500); 
+      }, 400);
+    });
+
+    // 2. Fungsi Reload Hanya Pada Iframe (Mengurangi beban refresh browser)
+    function reloadApp() {
+      loadingScreen.style.visibility = 'visible';
+      loadingScreen.style.opacity = '1';
+      iframe.src = iframe.src;
+    }
+
+    // 3. Tangkap Tombol Keyboard F5 / Ctrl+R untuk Reload Iframe Saja
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+        e.preventDefault();
+        reloadApp();
+      }
+    });
+
+    // 4. Pengontrol Mode Layar Penuh (Fullscreen)
+    function toggleFullscreen() {
+      const icon = document.getElementById('fullscreen-icon');
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+        icon.className = "fas fa-compress text-base";
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+          icon.className = "fas fa-expand text-base";
+        }
+      }
+    }
+
+    // 5. Detektor Koneksi Internet Real-time
+    function updateOnlineStatus() {
+      if (navigator.onLine) {
+        statusText.innerText = "Online";
+        connectionStatus.className = "flex items-center gap-2 text-xs font-semibold text-emerald-400 border-r border-white/10 pr-3";
+      } else {
+        statusText.innerText = "Offline";
+        connectionStatus.className = "flex items-center gap-2 text-xs font-semibold text-rose-500 border-r border-white/10 pr-3";
+      }
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // 6. Registrasi Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        const swCode = `
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+        `;
+        const blobSW = new Blob([swCode], {type: 'application/javascript'});
+        navigator.serviceWorker.register(URL.createObjectURL(blobSW));
+      });
+    }
+  </script>
+</body>
+</html>
