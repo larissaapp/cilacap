@@ -9,20 +9,18 @@
 
   <!-- Favicon & Icon -->
   <link rel="icon" type="image/jpeg" href="https://lh3.googleusercontent.com/pw/AP1GczPsClAMuZr8jGobp1T63vXCnzOJ0AE7Yoru4irAj7HUbAaxZkTpR_JRJZtNFNLeIGu0hCr-ma89kntUmQZAr_li0P8kJ-id_w79D9XsHe4FnWLgFP5Ihld-ww2arEbYvDMQKbNRdeoJWArbDYGUIJ13=w933-h945-s-no-gm?authuser=0">
-  <!-- FontAwesome & Tailwind CSS CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/pw/AP1GczPsClAMuZr8jGobp1T63vXCnzOJ0AE7Yoru4irAj7HUbAaxZkTpR_JRJZtNFNLeIGu0hCr-ma89kntUmQZAr_li0P8kJ-id_w79D9XsHe4FnWLgFP5Ihld-ww2arEbYvDMQKbNRdeoJWArbDYGUIJ13=w933-h945-s-no-gm?authuser=0">
 
-  <!-- Manifest PWA Khusus Desktop (Landscape Allowed) -->
+  <!-- Manifest PWA Khusus Desktop -->
   <script>
     const manifestPWA = {
       "name": "Larissa App",
       "short_name": "Cilacap",
-      "description": "Solusi membantu mengelola data laporan dengan lebih efisien dan modern",
+      "description": "Cek poin reward dan katalog hadiah Larissa - Desktop View",
       "start_url": ".",
       "display": "standalone",
       "background_color": "#0f172a",
-      "theme_color": "#009D7B",
+      "theme_color": "#ffffff",
       "orientation": "any",
       "icons": [
         {
@@ -62,7 +60,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
     }
 
     iframe { 
@@ -73,24 +70,7 @@
       background-color: #ffffff;
     }
 
-    /* Splash Screen Desktop */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #ffffff, 
-                  url('https://lh3.googleusercontent.com/pw/AP1GczNMhnPWuGyqhcoq6q8UnCrji1TiHA3HwcrBAX5N1DuhTjqikzTMLfQvH1DqG_jUPdi3jFqwLWXBTzlc-m7Gw-MBYZXIM0uc2gk5tnbQ7jlnc3ydVG9oYBYBpUXfHkQfaFzrcFvpSZgaccUlXI_-QSfa=w1920-h308-s-no-gm?authuser=0') center/cover no-repeat;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
-    }
-
-    /* Custom Scrollbar untuk Desktop */
+    /* Custom Scrollbar Desktop */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -104,10 +84,7 @@
     }
   </style>
 </head>
-<body class="relative select-none">
-
-  <!-- DESKTOP SPLASH SCREEN -->
-  <div id="loading-screen"></div>
+<body>
 
   <!-- CONTAINER UTAMA IFRAME DESKTOP -->
   <div class="desktop-container">
@@ -119,20 +96,7 @@
   </div>
 
   <script>
-    const iframe = document.getElementById('app-frame');
-    const loadingScreen = document.getElementById('loading-screen');
-
-    // 1. Sembunyikan Splash Screen setelah Iframe selesai dimuat
-    iframe.addEventListener('load', function() {
-      setTimeout(() => {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-          loadingScreen.style.visibility = 'hidden';
-        }, 500); 
-      }, 400);
-    });
-
-    // 2. Registrasi Service Worker
+    // Registrasi Service Worker PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         const swCode = `
