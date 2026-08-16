@@ -70,6 +70,23 @@
       background-color: #ffffff;
     }
 
+    /* Splash Screen Desktop */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(0, 157, 123, 0.85)), 
+                  url('https://images.unsplash.com/photo-1785138859928-e87e911afb2c?q=80') center/cover no-repeat;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
+    }
+
     /* Custom Scrollbar Desktop */
     ::-webkit-scrollbar {
       width: 8px;
@@ -84,7 +101,10 @@
     }
   </style>
 </head>
-<body>
+<body class="relative select-none">
+
+  <!-- DESKTOP SPLASH SCREEN -->
+  <div id="loading-screen"></div>
 
   <!-- CONTAINER UTAMA IFRAME DESKTOP -->
   <div class="desktop-container">
@@ -97,6 +117,7 @@
 
   <script>
     const iframe = document.getElementById('app-frame');
+    const loadingScreen = document.getElementById('loading-screen');
 
     // 1. Sembunyikan Splash Screen setelah Iframe selesai dimuat
     iframe.addEventListener('load', function() {
