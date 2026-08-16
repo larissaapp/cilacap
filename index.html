@@ -16,7 +16,7 @@
     const manifestPWA = {
       "name": "Larissa App",
       "short_name": "Cilacap",
-      "description": "Cek poin reward dan katalog hadiah Larissa - Desktop View",
+      "description": "Solusi membantu mengelola data laporan dengan lebih efisien dan modern.",
       "start_url": ".",
       "display": "standalone",
       "background_color": "#0f172a",
@@ -96,7 +96,19 @@
   </div>
 
   <script>
-    // Registrasi Service Worker PWA
+    const iframe = document.getElementById('app-frame');
+
+    // 1. Sembunyikan Splash Screen setelah Iframe selesai dimuat
+    iframe.addEventListener('load', function() {
+      setTimeout(() => {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.style.visibility = 'hidden';
+        }, 500); 
+      }, 400);
+    });
+    
+    // 2. Registrasi Service Worker PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         const swCode = `
