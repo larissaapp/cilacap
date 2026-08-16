@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <!-- Favicon & Icon -->
-  <link rel="icon" type="image/jpeg" href="https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80">
+  <link rel="icon" type="image/jpeg" href="https://lh3.googleusercontent.com/pw/AP1GczPsClAMuZr8jGobp1T63vXCnzOJ0AE7Yoru4irAj7HUbAaxZkTpR_JRJZtNFNLeIGu0hCr-ma89kntUmQZAr_li0P8kJ-id_w79D9XsHe4FnWLgFP5Ihld-ww2arEbYvDMQKbNRdeoJWArbDYGUIJ13=w933-h945-s-no-gm?authuser=0">
   <!-- FontAwesome & Tailwind CSS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,7 +18,7 @@
     const manifestPWA = {
       "name": "Larissa App",
       "short_name": "Cilacap",
-      "description": "Cek poin reward dan katalog hadiah Larissa - Desktop View",
+      "description": "Solusi membantu mengelola data laporan dengan lebih efisien dan modern",
       "start_url": ".",
       "display": "standalone",
       "background_color": "#0f172a",
@@ -26,12 +26,12 @@
       "orientation": "any",
       "icons": [
         {
-          "src": "https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80",
+          "src": "https://lh3.googleusercontent.com/pw/AP1GczPsClAMuZr8jGobp1T63vXCnzOJ0AE7Yoru4irAj7HUbAaxZkTpR_JRJZtNFNLeIGu0hCr-ma89kntUmQZAr_li0P8kJ-id_w79D9XsHe4FnWLgFP5Ihld-ww2arEbYvDMQKbNRdeoJWArbDYGUIJ13=w933-h945-s-no-gm?authuser=0",
           "sizes": "192x192",
           "type": "image/jpeg"
         },
         {
-          "src": "https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80",
+          "src": "https://lh3.googleusercontent.com/pw/AP1GczPsClAMuZr8jGobp1T63vXCnzOJ0AE7Yoru4irAj7HUbAaxZkTpR_JRJZtNFNLeIGu0hCr-ma89kntUmQZAr_li0P8kJ-id_w79D9XsHe4FnWLgFP5Ihld-ww2arEbYvDMQKbNRdeoJWArbDYGUIJ13=w933-h945-s-no-gm?authuser=0",
           "sizes": "512x512",
           "type": "image/jpeg"
         }
@@ -80,7 +80,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(0, 157, 123, 0.85)) center/cover no-repeat;
+      background: #ffffff, 
+                  url('https://lh3.googleusercontent.com/pw/AP1GczNMhnPWuGyqhcoq6q8UnCrji1TiHA3HwcrBAX5N1DuhTjqikzTMLfQvH1DqG_jUPdi3jFqwLWXBTzlc-m7Gw-MBYZXIM0uc2gk5tnbQ7jlnc3ydVG9oYBYBpUXfHkQfaFzrcFvpSZgaccUlXI_-QSfa=w1920-h308-s-no-gm?authuser=0') center/cover no-repeat;
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -105,32 +106,8 @@
 </head>
 <body class="relative select-none">
 
-  <!-- CONTROL TOOLBAR POJOK KANAN ATAS (KHUSUS DESKTOP) -->
-  <div class="fixed top-4 right-5 z-50 flex items-center gap-3">
-    <!-- Indikator Status Koneksi -->
-    <div id="connection-status" class="flex items-center gap-2 text-xs font-semibold text-emerald-400 border-r border-white/10 pr-3">
-      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-      <span id="status-text" class="hidden sm:inline">Online</span>
-    </div>
-
-    <!-- Tombol Mode Layar Penuh -->
-    <button onclick="toggleFullscreen()" title="Layar Penuh (F11)" class="text-white hover:text-[#009D7B] active:scale-95 transition p-1.5 cursor-pointer">
-      <i id="fullscreen-icon" class="fas fa-expand text-base"></i>
-    </button>
-  </div>
-
   <!-- DESKTOP SPLASH SCREEN -->
-  <div id="loading-screen">
-    <div class="bg-slate-900/80 backdrop-blur-md p-8 rounded-2xl border border-white/10 shadow-2xl flex flex-col items-center gap-4 text-center max-w-sm mx-4">
-      <img src="https://images.unsplash.com/photo-1785143266325-2fa61c9d462e?q=80" alt="Larissa Logo" class="w-20 h-20 rounded-2xl object-cover shadow-lg border border-emerald-500/30">
-      <div>
-        <h1 class="text-white text-xl font-bold tracking-wide">Larissa App</h1>
-        <p class="text-slate-400 text-xs mt-1">Memuat Antarmuka Desktop...</p>
-      </div>
-      <!-- Progress Spinner -->
-      <div class="w-8 h-8 border-4 border-emerald-500/20 border-t-emerald-400 rounded-full animate-spin mt-2"></div>
-    </div>
-  </div>
+  <div id="loading-screen"></div>
 
   <!-- CONTAINER UTAMA IFRAME DESKTOP -->
   <div class="desktop-container">
@@ -144,8 +121,6 @@
   <script>
     const iframe = document.getElementById('app-frame');
     const loadingScreen = document.getElementById('loading-screen');
-    const statusText = document.getElementById('status-text');
-    const connectionStatus = document.getElementById('connection-status');
 
     // 1. Sembunyikan Splash Screen setelah Iframe selesai dimuat
     iframe.addEventListener('load', function() {
@@ -157,41 +132,7 @@
       }, 400);
     });
 
-    // 3. Tangkap Tombol Keyboard F5 / Ctrl+R untuk Reload Iframe Saja
-    window.addEventListener('keydown', function(e) {
-      if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
-        e.preventDefault();
-      }
-    });
-
-    // 4. Pengontrol Mode Layar Penuh (Fullscreen)
-    function toggleFullscreen() {
-      const icon = document.getElementById('fullscreen-icon');
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => console.log(err));
-        icon.className = "fas fa-compress text-base";
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-          icon.className = "fas fa-expand text-base";
-        }
-      }
-    }
-
-    // 5. Detektor Koneksi Internet Real-time
-    function updateOnlineStatus() {
-      if (navigator.onLine) {
-        statusText.innerText = "Online";
-        connectionStatus.className = "flex items-center gap-2 text-xs font-semibold text-emerald-400 border-r border-white/10 pr-3";
-      } else {
-        statusText.innerText = "Offline";
-        connectionStatus.className = "flex items-center gap-2 text-xs font-semibold text-rose-500 border-r border-white/10 pr-3";
-      }
-    }
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-
-    // 6. Registrasi Service Worker
+    // 2. Registrasi Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         const swCode = `
